@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/wwwdmtr/payments/internal/wallet/walletdb"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/wwwdmtr/payments/internal/platform/apperr"
+	"github.com/wwwdmtr/payments/internal/wallet/walletdb"
 )
 
 // The generated models double as our domain types for now. The aliases mean
@@ -28,8 +29,9 @@ const (
 	Credit = walletdb.EntryDirectionCredit
 )
 
-// ErrAccountNotFound is returned when an account does not exist.
-var ErrAccountNotFound = errors.New("wallet: account not found")
+// ErrAccountNotFound is returned when an account does not exist. It wraps
+// apperr.ErrNotFound, so the HTTP layer answers with a 404.
+var ErrAccountNotFound = fmt.Errorf("account %w", apperr.ErrNotFound)
 
 // Store is the wallet's data access layer, often called a repository. It wraps
 // the sqlc queries, and owns database transactions.

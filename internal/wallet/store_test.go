@@ -5,10 +5,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/wwwdmtr/payments/internal/platform/postgres"
-	"github.com/wwwdmtr/payments/internal/wallet"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/wwwdmtr/payments/internal/platform/postgres"
+	"github.com/wwwdmtr/payments/internal/wallet"
 )
 
 // newStore connects to the database in WALLET_TEST_DATABASE_URL. Without it the
@@ -19,7 +19,7 @@ func newStore(t *testing.T) *wallet.Store {
 	if dsn == "" {
 		t.Skip("WALLET_TEST_DATABASE_URL not set, skipping integration test")
 	}
-	pool, err := postgres.NewPool(t.Context(), dsn)
+	pool, err := postgres.NewPool(t.Context(), dsn, 4)
 	if err != nil {
 		t.Fatalf("connect: %v", err)
 	}
